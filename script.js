@@ -71,8 +71,23 @@ let messageIndex = 0;
 function handleNoClick() {
     const noButton = document.querySelector('.no-button');
     const yesButton = document.querySelector('.yes-button');
+
     noButton.textContent = messages[messageIndex];
     messageIndex = (messageIndex + 1) % messages.length;
+    const currentTransform = window.getComputedStyle(noButton).transform;
+    console.log(currentTransform);
+    let scaleValue = 1; 
+
+    if (currentTransform !== "none") {
+        const matrix = currentTransform.match(/matrix\(([^)]+)\)/);
+        if (matrix) {
+            const values = matrix[1].split(', ');
+            scaleValue = parseFloat(values[0]);
+        }
+    }
+
+    noButton.style.transform = `scale(${scaleValue - 0.05})`;
+
     const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
     yesButton.style.fontSize = `${currentSize * 1.5}px`;
 }
